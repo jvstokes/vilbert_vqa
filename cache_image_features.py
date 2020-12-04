@@ -11,17 +11,6 @@ CONFIG = "./vilbert_vqa_from_huggingface.jsonnet"
 logger.info("Reading params")
 params = Params.from_file(CONFIG)
 
-logger.info("Instantiating train dataset reader and data loader")
-train_reader = DatasetReader.from_params(params["dataset_reader"])
-data_loader = DataLoader.from_params(
-    params["data_loader"].duplicate(),
-    reader=train_reader,
-    data_path=params["train_data_path"],
-)
-
-for instance in data_loader.iter_instances():
-    pass
-
 logger.info("Instantiating validation dataset reader and data loader")
 validation_reader = DatasetReader.from_params(params["validation_dataset_reader"])
 validation_data_loader = DataLoader.from_params(
@@ -31,6 +20,19 @@ validation_data_loader = DataLoader.from_params(
 )
 
 for instance in validation_data_loader.iter_instances():
+    pass
+
+del validation_data_loader
+
+logger.info("Instantiating train dataset reader and data loader")
+train_reader = DatasetReader.from_params(params["dataset_reader"])
+data_loader = DataLoader.from_params(
+    params["data_loader"].duplicate(),
+    reader=train_reader,
+    data_path=params["train_data_path"],
+)
+
+for instance in data_loader.iter_instances():
     pass
 
 logger.info("Done")

@@ -33,7 +33,7 @@ local vocabulary = if construct_vocab then {
       }
     },
     // "max_instances": 1000,
-    "image_processing_batch_size": 4,
+    "image_processing_batch_size": 16,
     "answer_vocab": if construct_vocab then null else vocabulary,
     "run_image_feature_extraction": !construct_vocab,
     "multiple_answers_per_question": !construct_vocab

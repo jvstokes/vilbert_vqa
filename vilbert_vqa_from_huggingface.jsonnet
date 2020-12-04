@@ -17,8 +17,8 @@ local vocabulary = if construct_vocab then {
 {
   "dataset_reader": {
     "type": "vqav2",
-    "image_dir": "/home/epwalsh/data/vqa/images",
-    "feature_cache_dir": "/home/epwalsh/data/vqa/feature_cache",
+    "image_dir": std.extVar("HOME") + "/data/vqa/images",
+    "feature_cache_dir": std.extVar("HOME") + "/data/vqa/feature_cache",
     "image_loader": "torch",
     "image_featurizer": "resnet_backbone",
     "region_detector": "faster_rcnn",

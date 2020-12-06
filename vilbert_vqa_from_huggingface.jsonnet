@@ -3,7 +3,8 @@ local effective_batch_size = 256;
 local gpu_batch_size = 256;
 local num_gpus = 1;
 local seed = 2;
-local learning_rate = 4e-3;
+local learning_rate = 4e-4;
+local num_workers = 1;
 // local data_dir = std.extVar("HOME") + "/data/vqa";
 local data_dir = "/data/vqa";
 
@@ -71,6 +72,7 @@ local vocabulary = if construct_vocab then {
   "data_loader": {
     "batch_size": gpu_batch_size,
     "shuffle": true,
+    "num_workers": num_workers,
     [if !construct_vocab then "max_instances_in_memory"]: 1024
   },
   [if num_gpus > 1 then "distributed"]: {

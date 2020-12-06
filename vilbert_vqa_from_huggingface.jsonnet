@@ -4,7 +4,7 @@ local gpu_batch_size = 128;
 local num_gpus = 1;
 local seed = 2;
 local learning_rate = 4e-3;
-local num_workers = 1;
+local num_workers = 0;
 // local data_dir = std.extVar("HOME") + "/data/vqa";
 local data_dir = "/data/vqa";
 

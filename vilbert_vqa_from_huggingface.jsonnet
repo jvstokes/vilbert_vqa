@@ -1,6 +1,6 @@
 local model_name = "bert-base-uncased";
 local effective_batch_size = 256;
-local gpu_batch_size = 128;
+local gpu_batch_size = 256;
 local num_gpus = 1;
 local seed = 2;
 // local data_dir = std.extVar("HOME") + "/data/vqa";

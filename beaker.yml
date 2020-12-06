@@ -3,19 +3,19 @@ description: AllenNLP Training Experiment
 tasks:
   - name: train
     image:
-      docker: "epwalsh/allennlp-beaker:latest"
+      docker: "epwalsh/allennlp-beaker:415b6ef93a6584c90718acb6fdb813fbd1e09e4a-cuda101"
     result:
       path: "/output"
     envVars:
       CONFIG: "https://raw.githubusercontent.com/epwalsh/vilbert_vqa/28bfe4023017e8175ba4f21edc372aa6c34f7155/vilbert_vqa_from_huggingface.jsonnet"
       OVERRIDES: '{"random_seed":3,"numpy_seed":3,"pytorch_seed":3}'
-      PIP_EXTRAS: "git+https://github.com/allenai/allennlp.git@torchvision"
+      # PIP_EXTRAS: "git+https://github.com/allenai/allennlp.git@415b6ef93a6584c90718acb6fdb813fbd1e09e4a"
     datasets:
       - mountPath: "/data/vqa"
         source:
           beaker: "ds_zbkh08o8ujxu"
     context:
-      cluster: "ai2/shared-v100-8x-16x"
+      cluster: "ai2/shared-v100-1x-8x"
       # cluster: "ai2/on-prem-ai2-server"
     resources:
       gpuCount: 1

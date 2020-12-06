@@ -7,7 +7,7 @@ tasks:
     result:
       path: "/output"
     envVars:
-      CONFIG: "https://raw.githubusercontent.com/epwalsh/vilbert_vqa/beaker/vilbert_vqa_from_huggingface.jsonnet"
+      CONFIG: "https://raw.githubusercontent.com/epwalsh/vilbert_vqa/2b8e2c615471c9d83846553cba4af1a54c96b315/vilbert_vqa_from_huggingface.jsonnet"
       OVERRIDES: '{"random_seed":3,"numpy_seed":3,"pytorch_seed":3}'
       PIP_EXTRAS: "git+https://github.com/allenai/allennlp.git@torchvision"
     datasets:

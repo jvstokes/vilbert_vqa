@@ -22,6 +22,7 @@ local vocabulary = if construct_vocab then {
     "type": "vqav2",
     "image_dir": data_dir + "/images",
     "feature_cache_dir": data_dir + "/feature_cache",
+    "feature_cache_read_only": true,
     "image_loader": "torch",
     "image_featurizer": "resnet_backbone",
     "region_detector": "faster_rcnn",

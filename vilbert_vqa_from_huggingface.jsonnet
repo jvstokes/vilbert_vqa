@@ -3,6 +3,8 @@ local effective_batch_size = 256;
 local gpu_batch_size = 128;
 local num_gpus = 1;
 local seed = 1;
+// local data_dir = std.extVar("HOME") + "/data/vqa"
+local data_dir = "/data/vqa"
 
 local construct_vocab = false;
 
@@ -18,8 +20,8 @@ local vocabulary = if construct_vocab then {
 {
   "dataset_reader": {
     "type": "vqav2",
-    "image_dir": std.extVar("HOME") + "/data/vqa/images",
-    "feature_cache_dir": std.extVar("HOME") + "/data/vqa/feature_cache",
+    "image_dir": data_dir + "/images",
+    "feature_cache_dir": data_dir + "/feature_cache",
     "image_loader": "torch",
     "image_featurizer": "resnet_backbone",
     "region_detector": "faster_rcnn",

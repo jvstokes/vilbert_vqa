@@ -1,0 +1,20 @@
+version: v2-alpha
+description: AllenNLP Training Experiment
+tasks:
+  - name: train
+    image:
+      docker: "epwalsh/allennlp-beaker:latest"
+    result:
+      path: "/output"
+    envVars:
+      CONFIG: "https://raw.githubusercontent.com/allenai/allennlp-models/master/training_config/rc/transformer_qa.jsonnet"
+      OVERRIDES: "{}"
+      PIP_EXTRAS: "git+https://github.com/allenai/allennlp.git@torchvision"
+    datasets:
+      - mountPath: "/data/vqa"
+        source:
+          beaker: "petew-vqa-1"
+    context:
+      cluster: "ai2/shared-v100-8x-16x"
+    resources:
+      gpuCount: 1

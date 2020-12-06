@@ -13,8 +13,9 @@ tasks:
     datasets:
       - mountPath: "/data/vqa"
         source:
-          beaker: "petew-vqa-1"
+          beaker: "ds_zbkh08o8ujxu"
     context:
-      cluster: "ai2/shared-v100-8x-16x"
+      # cluster: "ai2/shared-v100-8x-16x"
+      cluster: "ai2/on-prem-ai2-server"
     resources:
       gpuCount: 1

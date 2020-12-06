@@ -8,14 +8,14 @@ tasks:
       path: "/output"
     envVars:
       CONFIG: "https://raw.githubusercontent.com/epwalsh/vilbert_vqa/beaker/vilbert_vqa_from_huggingface.jsonnet"
-      OVERRIDES: "{}"
+      OVERRIDES: '{"random_seed":3,"numpy_seed":3,"pytorch_seed":3}'
       PIP_EXTRAS: "git+https://github.com/allenai/allennlp.git@torchvision"
     datasets:
       - mountPath: "/data/vqa"
         source:
           beaker: "ds_zbkh08o8ujxu"
     context:
-      # cluster: "ai2/shared-v100-8x-16x"
-      cluster: "ai2/on-prem-ai2-server"
+      cluster: "ai2/shared-v100-8x-16x"
+      # cluster: "ai2/on-prem-ai2-server"
     resources:
       gpuCount: 1

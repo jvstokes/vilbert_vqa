@@ -7,7 +7,7 @@ tasks:
     result:
       path: "/output"
     envVars:
-      CONFIG: "https://raw.githubusercontent.com/allenai/allennlp-models/master/training_config/rc/transformer_qa.jsonnet"
+      CONFIG: "https://raw.githubusercontent.com/epwalsh/vilbert_vqa/beaker/vilbert_vqa_from_huggingface.jsonnet"
       OVERRIDES: "{}"
       PIP_EXTRAS: "git+https://github.com/allenai/allennlp.git@torchvision"
     datasets:

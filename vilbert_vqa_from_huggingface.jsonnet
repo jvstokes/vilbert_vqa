@@ -106,6 +106,7 @@ local vocabulary = if construct_vocab then {
     "learning_rate_scheduler": {
       "type": "slanted_triangular",
       "gradual_unfreezing": true,
+      "discriminative_fine_tuning": true,
       "cut_frac": 0.1,
       "num_steps_per_epoch": std.ceil(658111 / $["data_loader"]["batch_size"] / $["trainer"]["num_gradient_accumulation_steps"]),
     },

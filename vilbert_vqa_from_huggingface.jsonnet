@@ -3,6 +3,7 @@ local effective_batch_size = 256;
 local gpu_batch_size = 256;
 local num_gpus = 1;
 local seed = 2;
+local learning_rate = 4e-5;
 // local data_dir = std.extVar("HOME") + "/data/vqa";
 local data_dir = "/data/vqa";
 
@@ -80,7 +81,7 @@ local vocabulary = if construct_vocab then {
   [if !construct_vocab then "trainer"]: {
     "optimizer": {
       "type": "huggingface_adamw",
-      "lr": 4e-4,
+      "lr": learning_rate,
       "correct_bias": true,
       "weight_decay": 0.01,
       "parameter_groups": [

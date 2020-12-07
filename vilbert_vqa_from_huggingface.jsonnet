@@ -25,8 +25,8 @@ local vocabulary = if construct_vocab then {
     "image_dir": data_dir + "/images",
     "feature_cache_dir": data_dir + "/feature_cache",
     "feature_cache_read_only": true,
-    "image_loader": "torch",
-    "image_featurizer": "resnet_backbone",
+    // "image_loader": "torch",
+    // "image_featurizer": "resnet_backbone",
     "region_detector": "faster_rcnn",
     "tokenizer": {
       "type": "pretrained_transformer",
@@ -73,7 +73,8 @@ local vocabulary = if construct_vocab then {
     "batch_size": gpu_batch_size,
     "shuffle": true,
     "num_workers": num_workers,
-    [if !construct_vocab then "max_instances_in_memory"]: gpu_batch_size * 10
+    "start_method": "spawn",
+    [if !construct_vocab then "max_instances_in_memory"]: gpu_batch_size * 2
   },
   [if num_gpus > 1 then "distributed"]: {
     "cuda_devices": std.range(0, num_gpus - 1)

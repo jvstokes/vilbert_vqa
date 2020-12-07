@@ -73,7 +73,7 @@ local vocabulary = if construct_vocab then {
     "batch_size": gpu_batch_size,
     "shuffle": true,
     "num_workers": num_workers,
-    [if !construct_vocab then "max_instances_in_memory"]: gpu_batch_size
+    [if !construct_vocab then "max_instances_in_memory"]: gpu_batch_size * 10
   },
   [if num_gpus > 1 then "distributed"]: {
     "cuda_devices": std.range(0, num_gpus - 1)

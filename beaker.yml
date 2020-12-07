@@ -7,7 +7,7 @@ tasks:
     result:
       path: "/output"
     envVars:
-      CONFIG: "https://raw.githubusercontent.com/epwalsh/vilbert_vqa/d8b8a0d2d17443ee32fc0b0f35b12c5ef3c94416/vilbert_vqa_from_huggingface.jsonnet"
+      CONFIG: "https://raw.githubusercontent.com/epwalsh/vilbert_vqa/a09994ddb434c54a0aae57f97f5563437fd9c755/vilbert_vqa_from_huggingface.jsonnet"
       OVERRIDES: '{"random_seed":3,"numpy_seed":3,"pytorch_seed":3}'
       # PIP_EXTRAS: "git+https://github.com/allenai/allennlp.git@415b6ef93a6584c90718acb6fdb813fbd1e09e4a"
     datasets:

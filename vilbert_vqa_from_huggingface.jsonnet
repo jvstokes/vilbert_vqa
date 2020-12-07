@@ -25,9 +25,9 @@ local vocabulary = if construct_vocab then {
     "image_dir": data_dir + "/images",
     "feature_cache_dir": data_dir + "/feature_cache",
     "feature_cache_read_only": true,
-    // "image_loader": "torch",
+    "image_loader": "torch",
     // "image_featurizer": "resnet_backbone",
-    "region_detector": "faster_rcnn",
+    // "region_detector": "faster_rcnn",
     "tokenizer": {
       "type": "pretrained_transformer",
       "model_name": model_name

@@ -5,8 +5,8 @@ local num_gpus = 1;
 local seed = 2;
 local learning_rate = 4e-5;
 local num_workers = 1;
-// local data_dir = std.extVar("HOME") + "/data/vqa";
-local data_dir = "/data/vqa";
+local data_dir = std.extVar("HOME") + "/data/vqa";
+// local data_dir = "/data/vqa";
 
 local construct_vocab = false;
 
@@ -73,8 +73,7 @@ local vocabulary = if construct_vocab then {
     "batch_size": gpu_batch_size,
     "shuffle": true,
     "num_workers": num_workers,
-    "start_method": "spawn",
-    [if !construct_vocab then "max_instances_in_memory"]: gpu_batch_size * 2
+    [if !construct_vocab then "max_instances_in_memory"]: gpu_batch_size
   },
   [if num_gpus > 1 then "distributed"]: {
     "cuda_devices": std.range(0, num_gpus - 1)

@@ -83,7 +83,7 @@ local vocabulary = if construct_vocab then {
   [if !construct_vocab then "trainer"]: {
     "optimizer": {
       "type": "huggingface_adamw",
-      "lr": 4e-4,
+      "lr": 4e-5,
       "correct_bias": true,
       "weight_decay": 0.01,
       "parameter_groups": [
@@ -92,8 +92,9 @@ local vocabulary = if construct_vocab then {
           [
             "^embeddings\\.*",
             "^encoder\\.layers1\\..*",
+            "^t_pooler\\.",
           ],
-          {"lr": 4e-5}
+          {"lr": 4e-6}
         ],
         // vision stream encoder, cross-stream connections, poolers, and classifier head
         // [

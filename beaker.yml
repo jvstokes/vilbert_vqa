@@ -3,12 +3,13 @@ description: AllenNLP Training Experiment
 tasks:
   - name: train
     image:
-      docker: "epwalsh/allennlp-beaker:797e95e5c278010dad59299b0fc8f2c4fe59c2c8-cuda101"
+      docker: "epwalsh/allennlp-beaker:f806eb74573f9efb53e24263d095e90ed7b234cd-cuda101"
     result:
       path: "/output"
     envVars:
-      CONFIG: "https://raw.githubusercontent.com/epwalsh/vilbert_vqa/e2692775274e88664bb0c130e1b838484ee8c445/vilbert_vqa_from_huggingface.jsonnet"
-      OVERRIDES: '{"random_seed":3,"numpy_seed":3,"pytorch_seed":3}'
+      CONFIG: "https://raw.githubusercontent.com/epwalsh/vilbert_vqa/480688e0a63983a8c1659fd99ced5e5563716aa8/vilbert_vqa_from_huggingface.jsonnet"
+      OVERRIDES: '{"random_seed":4,"numpy_seed":4,"pytorch_seed":4}'
+      BEAKER_FEATURE_SHARED_MEMORY_OVERRIDE: "true"
     datasets:
       - mountPath: "/data/vqa"
         source:

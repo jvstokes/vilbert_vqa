@@ -3,7 +3,6 @@ local effective_batch_size = 256;
 local gpu_batch_size = 64;
 local num_gpus = 1;
 local seed = 2;
-local learning_rate = 4e-5;
 local num_workers = 1;
 // local data_dir = std.extVar("HOME") + "/data/vqa";
 local data_dir = "/data/vqa";
@@ -84,7 +83,7 @@ local vocabulary = if construct_vocab then {
   [if !construct_vocab then "trainer"]: {
     "optimizer": {
       "type": "huggingface_adamw",
-      "lr": learning_rate,
+      "lr": 4e-4,
       "correct_bias": true,
       "weight_decay": 0.01,
       "parameter_groups": [
@@ -94,28 +93,33 @@ local vocabulary = if construct_vocab then {
             "^embeddings\\.*",
             "^encoder\\.layers1\\..*",
           ],
-          {}
+          {"lr": 4e-5}
         ],
         // vision stream encoder, cross-stream connections, poolers, and classifier head
-        [
-          [
-            "^image_embeddings\\.*",
-            "^encoder\\.layers2\\..*",
-            "^encoder\\.c_layer\\..*",
-            "^t_pooler\\..*",
-            "^v_pooler\\..*",
-            "^classifier\\..*",
-          ],
-          {}
-        ],
+        // [
+        //   [
+        //     "^image_embeddings\\.*",
+        //     "^encoder\\.layers2\\..*",
+        //     "^encoder\\.c_layer\\..*",
+        //     "^t_pooler\\..*",
+        //     "^v_pooler\\..*",
+        //     "^classifier\\..*",
+        //   ],
+        //   {}
+        // ],
       ],
     },
+    // "learning_rate_scheduler": {
+    //   "type": "slanted_triangular",
+    //   "gradual_unfreezing": true,
+    //   "discriminative_fine_tuning": true,
+    //   "cut_frac": 0.1,
+    //   "num_steps_per_epoch": std.ceil(658111 / $["data_loader"]["batch_size"] / $["trainer"]["num_gradient_accumulation_steps"]),
+    // },
     "learning_rate_scheduler": {
-      "type": "slanted_triangular",
-      "gradual_unfreezing": true,
-      "discriminative_fine_tuning": true,
-      "cut_frac": 0.1,
+      "type": "linear_with_warmup",
       "num_steps_per_epoch": std.ceil(658111 / $["data_loader"]["batch_size"] / $["trainer"]["num_gradient_accumulation_steps"]),
+      "warmup_steps": std.ceil(self.num_steps_per_epoch / 2),
     },
     "validation_metric": "+fscore",
     // "patience": 5,

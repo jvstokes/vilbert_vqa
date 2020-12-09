@@ -7,7 +7,7 @@ tasks:
     result:
       path: "/output"
     envVars:
-      CONFIG: "https://raw.githubusercontent.com/epwalsh/vilbert_vqa/1f3ae846b726aeaa334a7daeede14327b5655bfb/vilbert_vqa_from_huggingface.jsonnet"
+      CONFIG: "https://raw.githubusercontent.com/epwalsh/vilbert_vqa/e2692775274e88664bb0c130e1b838484ee8c445/vilbert_vqa_from_huggingface.jsonnet"
       OVERRIDES: '{"random_seed":3,"numpy_seed":3,"pytorch_seed":3}'
     datasets:
       - mountPath: "/data/vqa"

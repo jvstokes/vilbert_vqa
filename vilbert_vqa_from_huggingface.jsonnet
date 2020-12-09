@@ -73,7 +73,7 @@ local vocabulary = if construct_vocab then {
     "batch_size": gpu_batch_size,
     "shuffle": true,
     "num_workers": num_workers,
-    "start_method": "spawn",
+    // "start_method": "spawn",
     [if !construct_vocab then "max_instances_in_memory"]: gpu_batch_size * 2
   },
   [if num_gpus > 1 then "distributed"]: {

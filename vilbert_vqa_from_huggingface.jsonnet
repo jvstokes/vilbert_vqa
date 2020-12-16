@@ -4,8 +4,9 @@ local gpu_batch_size = 64;
 local num_gpus = 1;
 local seed = 2;
 local num_workers = 1;
-// local data_dir = std.extVar("HOME") + "/data/vqa";
 local data_dir = "/data/vqa";
+// Replace the above with this to run locally (assuming you actually have this cache locally).
+// local data_dir = std.extVar("HOME") + "/data/vqa";
 
 local construct_vocab = false;
 
@@ -25,8 +26,8 @@ local vocabulary = if construct_vocab then {
     "feature_cache_dir": data_dir + "/feature_cache",
     "feature_cache_read_only": true,
     "image_loader": "torch",
-    // "image_featurizer": "resnet_backbone",
-    // "region_detector": "faster_rcnn",
+    "image_featurizer": "resnet_backbone",
+    "region_detector": "faster_rcnn",
     "tokenizer": {
       "type": "pretrained_transformer",
       "model_name": model_name
@@ -37,6 +38,7 @@ local vocabulary = if construct_vocab then {
         "model_name": model_name
       }
     },
+    // For debugging:
     // "max_instances": 1000,
     "image_processing_batch_size": 16,
     "answer_vocab": if construct_vocab then null else vocabulary,
@@ -77,7 +79,8 @@ local vocabulary = if construct_vocab then {
   },
   [if num_gpus > 1 then "distributed"]: {
     "cuda_devices": std.range(0, num_gpus - 1)
-    #"cuda_devices": std.repeat([-1], num_gpus)  # Use this for debugging on CPU
+    // Use this for debugging on CPU.
+    // "cuda_devices": std.repeat([-1], num_gpus)
   },
   // Don't train if we're just constructing vocab. The results would be confusing.
   [if !construct_vocab then "trainer"]: {
@@ -124,10 +127,10 @@ local vocabulary = if construct_vocab then {
     },
     "validation_metric": "+fscore",
     // "patience": 5,
-    "num_epochs": 30,
+    "num_epochs": 50,
     "num_gradient_accumulation_steps": effective_batch_size / gpu_batch_size / std.max(1, num_gpus),
     "tensorboard_writer": {
-        "summary_interval": 10,
+        "summary_interval": 1000,
         "should_log_learning_rate": false,
         "should_log_parameter_statistics": false,
     },

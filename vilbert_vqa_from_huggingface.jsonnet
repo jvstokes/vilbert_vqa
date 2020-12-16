@@ -1,8 +1,12 @@
 local model_name = "bert-base-uncased";
 local effective_batch_size = 256;
-local gpu_batch_size = 128;
+local gpu_batch_size = 64;
 local num_gpus = 1;
-local seed = 1;
+local seed = 2;
+local num_workers = 1;
+local data_dir = "/data/vqa";
+// Replace the above with this to run locally (assuming you actually have this cache locally).
+// local data_dir = std.extVar("HOME") + "/data/vqa";
 
 local construct_vocab = false;
 
@@ -18,8 +22,9 @@ local vocabulary = if construct_vocab then {
 {
   "dataset_reader": {
     "type": "vqav2",
-    "image_dir": std.extVar("HOME") + "/data/vqa/images",
-    "feature_cache_dir": std.extVar("HOME") + "/data/vqa/feature_cache",
+    "image_dir": data_dir + "/images",
+    "feature_cache_dir": data_dir + "/feature_cache",
+    "feature_cache_read_only": true,
     "image_loader": "torch",
     "image_featurizer": "resnet_backbone",
     "region_detector": "faster_rcnn",
@@ -33,6 +38,7 @@ local vocabulary = if construct_vocab then {
         "model_name": model_name
       }
     },
+    // For debugging:
     // "max_instances": 1000,
     "image_processing_batch_size": 16,
     "answer_vocab": if construct_vocab then null else vocabulary,
@@ -67,17 +73,20 @@ local vocabulary = if construct_vocab then {
   "data_loader": {
     "batch_size": gpu_batch_size,
     "shuffle": true,
-    [if !construct_vocab then "max_instances_in_memory"]: 1024
+    "num_workers": num_workers,
+    // "start_method": "spawn",
+    [if !construct_vocab then "max_instances_in_memory"]: gpu_batch_size * 8
   },
   [if num_gpus > 1 then "distributed"]: {
     "cuda_devices": std.range(0, num_gpus - 1)
-    #"cuda_devices": std.repeat([-1], num_gpus)  # Use this for debugging on CPU
+    // Use this for debugging on CPU.
+    // "cuda_devices": std.repeat([-1], num_gpus)
   },
   // Don't train if we're just constructing vocab. The results would be confusing.
   [if !construct_vocab then "trainer"]: {
     "optimizer": {
       "type": "huggingface_adamw",
-      "lr": 4e-4,
+      "lr": 4e-5,
       "correct_bias": true,
       "weight_decay": 0.01,
       "parameter_groups": [
@@ -86,36 +95,42 @@ local vocabulary = if construct_vocab then {
           [
             "^embeddings\\.*",
             "^encoder\\.layers1\\..*",
+            "^t_pooler\\.",
           ],
-          {}
+          {"lr": 4e-6}
         ],
         // vision stream encoder, cross-stream connections, poolers, and classifier head
-        [
-          [
-            "^image_embeddings\\.*",
-            "^encoder\\.layers2\\..*",
-            "^encoder\\.c_layer\\..*",
-            "^t_pooler\\..*",
-            "^v_pooler\\..*",
-            "^classifier\\..*",
-          ],
-          {}
-        ],
+        // [
+        //   [
+        //     "^image_embeddings\\.*",
+        //     "^encoder\\.layers2\\..*",
+        //     "^encoder\\.c_layer\\..*",
+        //     "^t_pooler\\..*",
+        //     "^v_pooler\\..*",
+        //     "^classifier\\..*",
+        //   ],
+        //   {}
+        // ],
       ],
     },
+    // "learning_rate_scheduler": {
+    //   "type": "slanted_triangular",
+    //   "gradual_unfreezing": true,
+    //   "discriminative_fine_tuning": true,
+    //   "cut_frac": 0.1,
+    //   "num_steps_per_epoch": std.ceil(658111 / $["data_loader"]["batch_size"] / $["trainer"]["num_gradient_accumulation_steps"]),
+    // },
     "learning_rate_scheduler": {
-      "type": "slanted_triangular",
-      "gradual_unfreezing": true,
-      "discriminative_fine_tuning": true,
-      "cut_frac": 0.1,
+      "type": "linear_with_warmup",
       "num_steps_per_epoch": std.ceil(658111 / $["data_loader"]["batch_size"] / $["trainer"]["num_gradient_accumulation_steps"]),
+      "warmup_steps": std.ceil(self.num_steps_per_epoch / 2),
     },
     "validation_metric": "+fscore",
     // "patience": 5,
-    "num_epochs": 30,
+    "num_epochs": 50,
     "num_gradient_accumulation_steps": effective_batch_size / gpu_batch_size / std.max(1, num_gpus),
     "tensorboard_writer": {
-        "summary_interval": 10,
+        "summary_interval": 1000,
         "should_log_learning_rate": false,
         "should_log_parameter_statistics": false,
     },

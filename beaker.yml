@@ -1,0 +1,44 @@
+version: v2-alpha
+# NOTE: change 'description' each time you submit a new job
+description: Same as 029 but smaller LR
+tasks:
+  - name: train
+    image:
+      # NOTE: Update this when new commits are pushed.
+      # Images are built from this GitHub repo:
+      #   -> https://github.com/epwalsh/torch-beaker-image/
+      # and pushed to this Docker Hub repo:
+      #   -> https://hub.docker.com/repository/docker/epwalsh/allennlp-beaker
+      docker: "epwalsh/allennlp-beaker:1bf7fc7c6dae865a92bccbde97f3c3b94446cc84-cuda101"
+    result:
+      path: "/output"
+    envVars:
+      - name: CONFIG
+        # NOTE: Update this everytime you push a new config. If you're using the same file,
+        # all you have to do is replace the commit SHA with the new one.
+        value: "https://raw.githubusercontent.com/epwalsh/vilbert_vqa/fb56d71d6ec2831bb1f9be05fc17be40f5336e20/vilbert_vqa_from_huggingface.jsonnet"
+      - name: OVERRIDES
+        # NOTE: Update this to change the random seeds.
+        value: '{"random_seed":4,"numpy_seed":4,"pytorch_seed":4}'
+        # This is a beaker hack to enable shared memory on the container.
+        # It's needed to use multi-process data loading, which needs shared memory
+        # to send tensors between processes.
+      - name: BEAKER_FEATURE_SHARED_MEMORY_OVERRIDE
+        value: "true"
+    datasets:
+      # This dataset contains the images and the image feature cache.
+      #  -> https://beaker.org/ds/ds_zbkh08o8ujxu/details
+      - mountPath: "/data/vqa"
+        source:
+          beaker: "ds_zbkh08o8ujxu"
+    context:
+      # NOTE: This runs on Google Cloud, which currently uses CUDA 10.1. That's why the
+      # tag for the Docker image above ends with 'cuda101'.
+      cluster: "ai2/shared-v100-1x-8x"
+      # Replace with this for on-prem servers.
+      # NOTE: On-prem servers use CUDA 10.2 or 11.0, which means you'll need to use
+      # a different Docker above. Just replace 'cuda101' for example with 'cuda102' or 'cuda110'
+      # in the tag.
+      # cluster: "ai2/on-prem-ai2-server"
+    resources:
+      gpuCount: 1

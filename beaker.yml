@@ -16,7 +16,7 @@ tasks:
       - name: CONFIG
         # NOTE: Update this everytime you push a new config. If you're using the same file,
         # all you have to do is replace the commit SHA with the new one.
-        value: "https://raw.githubusercontent.com/epwalsh/vilbert_vqa/fb56d71d6ec2831bb1f9be05fc17be40f5336e20/vilbert_vqa_from_huggingface.jsonnet"
+        value: "https://raw.githubusercontent.com/epwalsh/vilbert_vqa/b4915c76af299c5490024f2319acdeed3a95faea/vilbert_vqa_from_huggingface.jsonnet"
       - name: OVERRIDES
         # NOTE: Update this to change the random seeds.
         value: '{"random_seed":4,"numpy_seed":4,"pytorch_seed":4}'

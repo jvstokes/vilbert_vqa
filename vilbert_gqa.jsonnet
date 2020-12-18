@@ -36,7 +36,7 @@ local vocabulary = if construct_vocab then {
       }
     },
     // Change max instances
-    "max_instances": 100,
+    # "max_instances": 100,
     "image_processing_batch_size":32,
     "answer_vocab": if construct_vocab then null else vocabulary,
     "run_image_feature_extraction": !construct_vocab,
@@ -46,7 +46,7 @@ local vocabulary = if construct_vocab then {
     "keep_unanswerable_questions": true
   },
   "vocabulary": vocabulary,
-  "train_data_path": "testdev_all",
+  "train_data_path": "train_all",
   "validation_data_path": "val_balanced",
   "model": {
     "type": "vqa_vilbert",
